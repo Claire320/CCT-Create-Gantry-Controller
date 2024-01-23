@@ -257,12 +257,12 @@ function moveContainerTo(x1,z1,x2,z2)
 
 end
 
-function checkSpaceAt(x,z)
+function checkSpaceAt(x,z,default)
   moveToPoint(x,0,z)
 
   newMoveY(9)
 
-  local scanOutput = false
+  local scanOutput = default or false
   if redstonePort.getInput("east") then
     scanOutput = true
   else
@@ -308,14 +308,32 @@ while true do
     if tonumber(args) ~= nil then
       currentXIndex = 6
       local availableX = checkSpaceAt(currentXIndex,tonumber(args))
-      repeat
-        currentXIndex = currentXIndex-1
-        availableX = checkSpaceAt(currentXIndex,tonumber(args))
-      until availableX or currentXIndex == 1
+      if not availableX then
+        repeat
+          currentXIndex = currentXIndex-1
+          availableX = checkSpaceAt(currentXIndex,tonumber(args))
+        until availableX or currentXIndex == 1
+      end
       if availableX then
         moveContainerTo(9,2,currentXIndex,tonumber(args))
       else
         print("no space available")
+      end
+    end
+  elseif taskType == "Deliver" then
+    if tonumber(args) ~= nil then
+      currentXIndex = 6
+      local availableX = checkSpaceAt(currentXIndex,tonumber(args),true)
+      if availableX then
+        repeat
+          currentXIndex = currentXIndex-1
+          availableX = checkSpaceAt(currentXIndex,tonumber(args),true)
+        until availableX == false or currentXIndex == 1
+      end
+      if not availableX then
+        moveContainerTo(currentXIndex,tonumber(args),10,2)
+      else
+        print("no crates found")
       end
     end
   end
