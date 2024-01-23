@@ -34,7 +34,7 @@ while true do
   if disk.isPresent("left") then
     local label = disk.getLabel("left")
 
-    local splitLabel = split("label","-")
+    local splitLabel = split(label,"-")
     local command = splitLabel[1]
     local resource = splitLabel[2]
     local targetFacility = splitLabel[3]
@@ -65,6 +65,7 @@ while true do
         deliverCrate(5)
       end
     end
+    disk.eject("left")
   end
 
   sleep(.1)
