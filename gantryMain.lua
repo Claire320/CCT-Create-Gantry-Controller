@@ -260,12 +260,18 @@ end
 function checkSpaceAt(x,z)
   moveToPoint(x,0,z)
 
+  newMoveY(9)
+
+  local scanOutput = false
   if redstonePort.getInput("east") then
-    return true
+    scanOutput = true
   else
-    return false
+    scanOutput = false
   end
 
+  newMoveY(0)
+
+  return scanOutput
 end
 
 
@@ -283,7 +289,7 @@ while true do
   if DEBUG then
     print("waiting")
   end
-  
+
   local event, side, channel, replyChannel, message, distance
   repeat
     event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
@@ -301,10 +307,10 @@ while true do
   if taskType == "SortAt" then
     if tonumber(args) ~= nil then
       currentXIndex = 6
-      local availableX = checkSpaceAt(currentXIndex,z)
+      local availableX = checkSpaceAt(currentXIndex,tonumber(args))
       repeat
         currentXIndex = currentXIndex-1
-        availableX = checkSpaceAt(currentXIndex,z)
+        availableX = checkSpaceAt(currentXIndex,tonumber(args))
       until availableX or currentXIndex == 1
       if availableX then
         moveContainerTo(9,2,currentXIndex,tonumber(args))
