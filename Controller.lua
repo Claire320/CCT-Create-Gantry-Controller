@@ -2,7 +2,7 @@ local modem = peripheral.find("modem") or error("No modem attached", 0)
 
 
 function split(pString, pPattern)
-  local Table = {}  -- NOTE: use {n = 0} in Lua-5.0
+  local Table = {}
   local fpat = "(.-)" .. pPattern
   local last_end = 1
   local s, e, cap = pString:find(fpat, 1)
